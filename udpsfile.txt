@@ -15,6 +15,10 @@ public class UDPServerFileReceiver {
             byte[] receiveData = new byte[1024];
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 
+            //for (int i = 0; i < receivePacket.getLength(); i++) {
+       // System.out.print((char) fileData[i]);
+    //}
+
             socket.receive(receivePacket);
             String fileName = new String(receivePacket.getData(), 0, receivePacket.getLength());
             fileOutputStream = new FileOutputStream(fileName);

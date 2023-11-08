@@ -1,0 +1,57 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class TCPServer {
+    public static void main(String[] args) {
+        try {
+            ServerSocket ss = new ServerSocket(100);
+            System.out.println("Server is listening on port 100");
+
+            Socket cs = ss.accept();
+            System.out.println("Client is connected");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(cs.getInputStream()));
+            PrintWriter out = new PrintWriter(cs.getOutputStream(), true);
+
+            String clientMessage = in.readLine();
+            System.out.println("Client Says: " + clientMessage);
+
+            Scanner sc = new Scanner(System.in);
+            while (true) {
+                
+                System.out.print("Enter a message to send to the client: ");
+                String serverMessage = sc.nextLine();
+                System.out.println("Message send to CLIENT SUCCESFULLY!");
+                if ("stop".equals(serverMessage) || "stop".equals(clientMessage)) {
+                    break;
+                }
+                
+                out.println(serverMessage);
+                clientMessage = in.readLine();
+                System.out.println("Client Says: " + clientMessage);
+                
+                if ("stop".equals(serverMessage) || "stop".equals(clientMessage)) {
+                    break;
+                }
+                
+                if (clientMessage.isEmpty()) {
+                    continue;
+                }
+            }
+
+            
+            in.close();
+            out.close();
+            cs.close();
+            sc.close();
+            ss.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
